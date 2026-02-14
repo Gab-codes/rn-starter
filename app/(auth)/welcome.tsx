@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
-import { Dimensions, Image, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import Animated, { FadeIn, FadeOut, SlideInRight, SlideOutLeft } from 'react-native-reanimated';
 
 const { height } = Dimensions.get('window');
@@ -23,16 +23,14 @@ const ONBOARDING_STEPS: OnboardingStep[] = [
   },
   {
     id: 2,
-    heading: 'Connect & Trade',
-    description:
-      'Easily connect with other farmers and buyers in your community. Share resources and grow together.',
+    heading: 'Fast & Reliable Delivery',
+    description: 'Track your order in real time and enjoy fast delivery to your home or business',
     image: require('@/assets/images/welcome-2.png'),
   },
   {
     id: 3,
-    heading: 'Grow Your Business',
-    description:
-      'Access tools and resources to expand your agricultural business. Reach more customers and increase profits.',
+    heading: 'Fresh From the Farm',
+    description: 'Get high quality products directly from trusted partner farms.',
     image: require('@/assets/images/welcome-3.png'),
   },
 ];
@@ -45,12 +43,12 @@ const StepIndicators = ({
   totalSteps: number;
 }) => {
   return (
-    <View className="flex-row items-center justify-center gap-2">
+    <View className="flex-row items-center justify-center gap-[5px]">
       {Array.from({ length: totalSteps }).map((_, index) => (
         <View
           key={index}
           className={`h-2 rounded-full transition-all ${
-            index === currentStep ? 'w-8 bg-green-700' : 'w-2 bg-gray-300'
+            index === currentStep ? 'w-[17.72px] bg-primary' : 'w-[7.09px] bg-gray-300'
           }`}
         />
       ))}
@@ -76,15 +74,19 @@ export default function Welcome() {
     router.push('/(auth)/sign-up');
   };
 
+  const handleSignIn = () => {
+    router.push('/(auth)/sign-in');
+  };
+
   const step = ONBOARDING_STEPS[currentStep];
 
   return (
-    <View className="flex-1 bg-white">
+    <ScrollView className="flex-1 bg-white">
       {/* Header with Logo */}
-      <View className="items-center justify-center pb-4 pt-12">
+      <View className="items-center justify-center pb-10 pt-14">
         <Image
-          source={require('@/assets/images/react-native-reusables-light.png')}
-          style={{ width: 80, height: 80 }}
+          source={require('@/assets/images/logo.png')}
+          style={{ width: '100%', height: 50 }}
           resizeMode="contain"
         />
       </View>
@@ -96,7 +98,7 @@ export default function Welcome() {
           key={`image-${step.id}`}
           entering={SlideInRight.duration(400)}
           exiting={SlideOutLeft.duration(400)}
-          style={{ height: height * 0.45 }}
+          style={{ height: height * 0.4 }}
           className="mb-8">
           <Image
             source={step.image}
@@ -108,21 +110,22 @@ export default function Welcome() {
             resizeMode="contain"
           />
         </Animated.View>
+        {/* Spacer to push buttons to bottom */}
+        <View className="flex-1 pt-8" />
 
         {/* Text Content */}
         <Animated.View
           key={`text-${step.id}`}
           entering={FadeIn.delay(200).duration(400)}
           exiting={FadeOut.duration(200)}
-          className="mb-8 gap-3">
-          <Text className="text-center text-3xl font-bold text-foreground">{step.heading}</Text>
-          <Text className="text-center text-base leading-6 text-muted-foreground">
+          className="mb-8 gap-3 px-6">
+          <Text className="mx-auto max-w-52 text-center text-4xl font-bold text-foreground">
+            {step.heading}
+          </Text>
+          <Text className="text-center text-lg leading-6 text-muted-foreground">
             {step.description}
           </Text>
         </Animated.View>
-
-        {/* Spacer to push buttons to bottom */}
-        <View className="flex-1" />
 
         {/* Step Indicators */}
         <View className="mb-6">
@@ -130,24 +133,24 @@ export default function Welcome() {
         </View>
 
         {/* Navigation Buttons */}
-        <View className="gap-3 pb-8">
+        <View className="gap-3 pb-10">
           {currentStep === ONBOARDING_STEPS.length - 1 ? (
-            <Button
-              onPress={handleGetStarted}
-              className="h-[60px] bg-green-700 active:bg-green-800">
-              <Text className="font-semibold text-white">Get Started</Text>
+            <Button onPress={handleGetStarted} className="h-[60px] active:bg-green-800">
+              <Text className="text-lg font-semibold text-white">Get Started</Text>
             </Button>
           ) : (
-            <Button onPress={handleNext} className="bg-green-700 active:bg-green-800">
-              <Text className="font-semibold text-white">Next</Text>
+            <Button onPress={handleNext} className="h-[60px] active:bg-green-800">
+              <Text className="text-lg font-semibold text-white">Next</Text>
             </Button>
           )}
-
-          <TouchableOpacity onPress={handleSkip} className="py-3" activeOpacity={0.7}>
-            <Text className="text-center font-semibold text-green-700">Skip</Text>
-          </TouchableOpacity>
+          <View className="flex-row items-center justify-center pt-2">
+            <Text className="text-[#626262]">Already have an account?</Text>
+            <TouchableOpacity onPress={handleSignIn} className="ml-1">
+              <Text className="font-bold">Login</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
