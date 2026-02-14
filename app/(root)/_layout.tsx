@@ -1,3 +1,4 @@
+import SafeScreen from '@/components/safe-screen';
 import { Redirect, Stack } from 'expo-router';
 
 export default function RootLayout() {
@@ -6,5 +7,9 @@ export default function RootLayout() {
   if (!isLoggedIn) {
     return <Redirect href="/welcome" />;
   }
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <SafeScreen>
+      <Stack screenOptions={{ headerShown: false }} />;
+    </SafeScreen>
+  );
 }

@@ -8,7 +8,7 @@ import { Bell, Compass, HomeIcon, Plus, User } from 'lucide-react-native';
 // Import tab screens
 import Create from './create';
 import Explore from './explore';
-import Home from './index';
+import Home from '.';
 import Notifications from './notifications';
 import Profile from './profile';
 
