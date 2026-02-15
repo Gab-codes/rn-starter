@@ -3,7 +3,7 @@ import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import { Bell, Compass, HomeIcon, Plus, User } from 'lucide-react-native';
+import { Compass, HomeIcon, MessageCircleMoreIcon, Plus, User2 } from 'lucide-react-native';
 
 // Import tab screens
 import Create from './create';
@@ -38,7 +38,7 @@ const TabBar = () => {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, size }) => <HomeIcon size={size} color={color} />,
-          tabBarLabel: ({ color }) => <Text>Home</Text>,
+          tabBarLabel: () => <Text>Home</Text>,
         }}
       />
       <Tab.Screen
@@ -47,7 +47,7 @@ const TabBar = () => {
         options={{
           title: 'Explore',
           tabBarIcon: ({ color, size }) => <Compass size={size} color={color} />,
-          tabBarLabel: ({ color }) => <Text>Explore</Text>,
+          tabBarLabel: () => <Text>Explore</Text>,
         }}
       />
       <Tab.Screen
@@ -56,7 +56,7 @@ const TabBar = () => {
         options={{
           title: 'Create',
           tabBarIcon: ({ color, size }) => <Plus size={size} color={color} />,
-          tabBarLabel: ({ color }) => <Text>Create</Text>,
+          tabBarLabel: () => <Text>Order</Text>,
         }}
       />
       <Tab.Screen
@@ -64,8 +64,8 @@ const TabBar = () => {
         component={Notifications}
         options={{
           title: 'Notifications',
-          tabBarIcon: ({ color, size }) => <Bell size={size} color={color} />,
-          tabBarLabel: ({ color }) => <Text>Notifications</Text>,
+          tabBarIcon: ({ color, size }) => <MessageCircleMoreIcon size={size} color={color} />,
+          tabBarLabel: () => <Text>Notifications</Text>,
         }}
       />
       <Tab.Screen
@@ -73,8 +73,8 @@ const TabBar = () => {
         component={Profile}
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, size }) => <User size={size} color={color} />,
-          tabBarLabel: ({ color }) => <Text>Profile</Text>,
+          tabBarIcon: ({ color, size }) => <User2 size={size} color={color} />,
+          tabBarLabel: () => <Text>Profile</Text>,
         }}
       />
     </Tab.Navigator>

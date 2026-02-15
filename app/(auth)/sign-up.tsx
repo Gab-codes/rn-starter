@@ -1,67 +1,190 @@
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Text } from '@/components/ui/text';
+import { Label } from '@/components/ui/label';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
-import { ScrollView, View } from 'react-native';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { ScrollView, View, Pressable, TouchableOpacity, Image, Platform } from 'react-native';
+import { lightHaptic } from '@/lib/utils';
+
+/* ---------------- validation helpers ---------------- */
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function isValidEmail(email: string) {
+  return emailRegex.test(email);
+}
+
+function isValidPassword(password: string) {
+  return password.length >= 8;
+}
+
+/* ---------------- component ---------------- */
 
 export default function SignUp() {
   const router = useRouter();
-  const [fullName, setFullName] = useState('');
+
+  const [form, setForm] = useState<SignUpForm>({
+    name: '',
+    email: '',
+    password: '',
+  });
+
+  const [rememberMe, setRememberMe] = useState(false);
+  const [acceptTerms, setAcceptTerms] = useState(false);
+
+  function updateField<K extends keyof SignUpForm>(key: K, value: SignUpForm[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function toggleCheckbox(setter: Dispatch<SetStateAction<boolean>>) {
+    lightHaptic();
+    setter((prev) => !prev);
+  }
+
+  /* ---------------- derived validation ---------------- */
+
+  const isNameValid = form.name.trim().length > 0;
+  const isEmailValid = isValidEmail(form.email);
+  const isPasswordValid = isValidPassword(form.password);
+
+  const isFormValid = isNameValid && isEmailValid && isPasswordValid && acceptTerms;
+
+  function handleSubmit() {
+    if (!isFormValid) return;
+
+    console.log('Form data:', form);
+    router.push('/(auth)/sign-in');
+  }
 
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
-      contentContainerClassName="sm:flex-1 items-center justify-center p-4 py-8 sm:py-4 sm:p-6 mt-safe"
-      keyboardDismissMode="interactive">
-      <View className="w-full flex-1 items-center justify-center gap-4 p-4">
-        <Text className="text-3xl font-bold">Create Account Agrixa Account</Text>
-        <Text className="mt-2 text-center text-muted-foreground">
-          Fill your information below or register with your social account
-        </Text>
+      keyboardDismissMode="interactive"
+      contentContainerClassName="flex-1 items-center justify-start p-5 pt-20 pb-8">
+      <View className="w-full max-w-md gap-4">
+        {/* Header */}
+        <View className="px-6">
+          <Text className="text-center text-2xl font-bold">Create Agrixa Account</Text>
+          <Text className="mt-2 text-center text-muted-foreground">
+            Fill your information below or register with your social account
+          </Text>
+        </View>
 
-        <View className="w-full">
-          <Text className="text-lg font-semibold"> Name</Text>
+        {/* Name */}
+        <View>
+          <Label htmlFor="name" nativeID="name" className="text-lg font-semibold">
+            Name
+          </Label>
           <Input
-            value={fullName}
-            onChangeText={(fullName) => setFullName(fullName)}
+            id="name"
+            value={form.name}
+            onChangeText={(v) => updateField('name', v)}
             placeholder="Enter your name"
             className="h-[49px]"
           />
         </View>
-        <View className="w-full">
-          <Text className="text-lg font-semibold">Email</Text>
+
+        {/* Email */}
+        <View>
+          <Label htmlFor="email" nativeID="email" className="text-lg font-semibold">
+            Email
+          </Label>
           <Input
-            keyboardType="email-address"
-            autoComplete="email"
+            id="email"
+            value={form.email}
+            onChangeText={(v) => updateField('email', v.trim())}
             placeholder="Enter your email"
             className="h-[49px]"
-            value={fullName}
-            onChangeText={(fullName) => setFullName(fullName)}
+            keyboardType="email-address"
+            autoComplete="email"
+            autoCapitalize="none"
           />
+          {form.email.length > 0 && !isEmailValid && (
+            <Text className="mt-1 text-xs text-red-500">Please enter a valid email address</Text>
+          )}
         </View>
-        <View className="w-full">
-          <Text className="text-lg font-semibold">Email</Text>
+
+        {/* Password */}
+        <View>
+          <Label htmlFor="password" nativeID="password" className="text-lg font-semibold">
+            Password
+          </Label>
           <Input
+            id="password"
+            value={form.password}
+            onChangeText={(v) => updateField('password', v)}
             placeholder="Enter your password"
+            secureTextEntry
             className="h-[49px]"
-            secureTextEntry={true}
-            value={fullName}
-            onChangeText={(fullName) => setFullName(fullName)}
           />
+          {form.password.length > 0 && !isPasswordValid && (
+            <Text className="mt-1 text-xs text-red-500">
+              Password must be at least 6 characters
+            </Text>
+          )}
         </View>
 
-        <View className="mt-8 w-full gap-3">
-          <Button onPress={() => router.push('/(auth)/sign-in')} className="active:bg-green-800">
-            <Text className="text-white">Sign Up</Text>
-          </Button>
+        {/* Checkboxes */}
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row items-center gap-2">
+            <Checkbox
+              checked={rememberMe}
+              onCheckedChange={() => toggleCheckbox(setRememberMe)}
+              className="size-3.5"
+              id="remember-me"
+            />
+            <Label
+              className="text-xs"
+              htmlFor="remember-me"
+              onPress={() => toggleCheckbox(setRememberMe)}>
+              Remember me
+            </Label>
+          </View>
 
-          <Button
-            onPress={() => router.push('/(auth)/sign-in')}
-            variant="ghost"
-            className="border border-gray-300">
-            <Text className="text-gray-900">Already have an account? Sign In</Text>
-          </Button>
+          <View className="flex-row items-center gap-2">
+            <Checkbox
+              checked={acceptTerms}
+              onCheckedChange={() => toggleCheckbox(setAcceptTerms)}
+              variant="transparent"
+              id="accept-terms"
+              className="rounded-full"
+            />
+            <Label
+              className="text-xs"
+              htmlFor="accept-terms"
+              onPress={() => toggleCheckbox(setAcceptTerms)}>
+              Agree with <Text className="text-xs text-primary">Terms & Conditions</Text>
+            </Label>
+          </View>
+        </View>
+
+        {/* Submit */}
+        <Button onPress={handleSubmit} className="h-[60px] w-full" disabled={!isFormValid}>
+          <Text className="text-lg font-semibold text-white">Sign Up</Text>
+        </Button>
+
+        {/* Divider */}
+        <View className="relative my-2 w-full flex-row items-center">
+          <View className="absolute h-[0.7px] w-full bg-[#8D8D8D]" />
+          <Text className="mx-auto bg-white px-2">Or Sign Up with</Text>
+        </View>
+
+        {/* Google Login */}
+        <Pressable
+          onPress={() => console.log('Google login')}
+          className="h-[52px] w-full flex-row items-center justify-center gap-2 rounded-md border border-gray-300">
+          <Image source={require('@/assets/images/google.png')} className="size-6" />
+          <Text className="font-semibold">Continue with Google</Text>
+        </Pressable>
+
+        {/* Footer */}
+        <View className="flex-row items-center justify-center pt-2">
+          <Text className="text-[#626262]">Already have an account?</Text>
+          <TouchableOpacity onPress={() => router.push('/(auth)/sign-in')} className="ml-1">
+            <Text className="font-bold">Login</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>

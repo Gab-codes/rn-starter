@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
+import { lightHaptic } from '@/lib/utils';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Dimensions, Image, ScrollView, TouchableOpacity, View } from 'react-native';
@@ -135,11 +136,17 @@ export default function Welcome() {
         {/* Navigation Buttons */}
         <View className="gap-3 pb-10">
           {currentStep === ONBOARDING_STEPS.length - 1 ? (
-            <Button onPress={handleGetStarted} className="h-[60px] active:bg-green-800">
+            <Button
+              onPress={() => (lightHaptic(), handleGetStarted())}
+              className="h-[60px] active:bg-green-800">
               <Text className="text-lg font-semibold text-white">Get Started</Text>
             </Button>
           ) : (
-            <Button onPress={handleNext} className="h-[60px] active:bg-green-800">
+            <Button
+              onPress={() => {
+                (lightHaptic(), handleNext());
+              }}
+              className="h-[60px] active:bg-green-800">
               <Text className="text-lg font-semibold text-white">Next</Text>
             </Button>
           )}
