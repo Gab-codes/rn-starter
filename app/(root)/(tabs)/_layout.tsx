@@ -5,10 +5,10 @@ import {
 } from '@react-navigation/bottom-tabs';
 
 // Import tab screens
-import Create from './create';
+import Order from './order';
 import Explore from './explore';
 import Home from '.';
-import Notifications from './notifications';
+import Chat from './chat';
 import Profile from './profile';
 import { View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -65,10 +65,10 @@ const TabBar = () => {
         }}
       />
       <Tab.Screen
-        name="create"
-        component={Create}
+        name="order"
+        component={Order}
         options={{
-          title: 'Create',
+          title: 'Order',
           tabBarIcon: ({ color, size, focused }) => (
             <Ionicons name={focused ? 'list' : 'list-outline'} size={size} color={color} />
           ),
@@ -80,8 +80,8 @@ const TabBar = () => {
         }}
       />
       <Tab.Screen
-        name="notifications"
-        component={Notifications}
+        name="chat"
+        component={Chat}
         options={{
           title: 'Notifications',
           tabBarIcon: ({ color, size, focused }) => (

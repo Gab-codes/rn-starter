@@ -1,8 +1,11 @@
 import { View, Image } from 'react-native';
 import { Text } from './ui/text';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuthStore } from '@/store';
 
 const Header = () => {
+  const user = useAuthStore((state) => state.user);
+
   return (
     <View className="flex-row items-center justify-between">
       {/* Left */}
@@ -16,7 +19,7 @@ const Header = () => {
         </View>
 
         <View>
-          <Text className="text-base font-bold text-foreground">Hello, Gabriel</Text>
+          <Text className="text-base font-bold text-foreground">Hello, {user?.firstName}</Text>
           <Text className="text-xs font-medium text-muted-foreground">
             What would you like to do today?
           </Text>

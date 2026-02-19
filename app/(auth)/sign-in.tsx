@@ -12,10 +12,12 @@ import { AxiosError } from 'axios';
 import { Alert } from '@/components/ui/alert';
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react-native';
+import { useAuthStore } from '@/store';
 
 export default function SignIn() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
+  const setUser = useAuthStore((state) => state.setUser);
 
   const {
     control,
@@ -29,9 +31,13 @@ export default function SignIn() {
     mode: 'onChange',
   });
 
-  const loginMutation = useMutation<any, AxiosError<BackendError>, SignInForm>({
+  const loginMutation = useMutation<any, AxiosError<LoginError>, SignInForm>({
     mutationFn: ({ email, password }) => loginFn(email, password),
-    onSuccess: () => router.replace('/(root)/(tabs)'),
+    onSuccess: (data) => {
+      router.replace('/(root)/(tabs)');
+      const { user, accessToken: token } = data?.data;
+      setUser(user, token);
+    },
   });
 
   const onSubmit = (data: SignInForm) => {
@@ -64,7 +70,7 @@ export default function SignIn() {
         {/* Backend Error */}
         <Alert
           visible={!!backendError}
-          message={backendError || ''}
+          message={backendError || 'Something went wrong'}
           variant="error"
           onClose={() => loginMutation.reset()}
         />
