@@ -3,7 +3,6 @@ import {
   BottomTabNavigationOptions,
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs';
-import { Compass, HomeIcon, MessageCircleMoreIcon, Plus, User2 } from 'lucide-react-native';
 
 // Import tab screens
 import Create from './create';
@@ -11,6 +10,8 @@ import Explore from './explore';
 import Home from '.';
 import Notifications from './notifications';
 import Profile from './profile';
+import { View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,10 +19,11 @@ const TabBar = () => {
   const screenOptions: BottomTabNavigationOptions = {
     headerShown: false,
     tabBarShowLabel: true,
+    tabBarBackground: () => <View style={{ backgroundColor: '#F6F6F6' }} />,
     tabBarStyle: {
       borderTopWidth: 1,
-      paddingBottom: 8,
-      paddingTop: 8,
+      paddingBottom: 6,
+      paddingTop: 6,
     },
   };
 
@@ -29,16 +31,22 @@ const TabBar = () => {
     <Tab.Navigator
       screenOptions={{
         ...screenOptions,
-        tabBarActiveTintColor: '#000000',
-        tabBarInactiveTintColor: '#888888',
+        tabBarActiveTintColor: '#073E2E',
+        tabBarInactiveTintColor: '#62626299',
       }}>
       <Tab.Screen
         name="index"
         component={Home}
         options={{
           title: 'Home',
-          tabBarIcon: ({ color, size }) => <HomeIcon size={size} color={color} />,
-          tabBarLabel: () => <Text>Home</Text>,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'home-sharp' : 'home-outline'} size={size} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text className="text-xs font-medium" style={{ color }}>
+              Home
+            </Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -46,8 +54,14 @@ const TabBar = () => {
         component={Explore}
         options={{
           title: 'Explore',
-          tabBarIcon: ({ color, size }) => <Compass size={size} color={color} />,
-          tabBarLabel: () => <Text>Explore</Text>,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'compass' : 'compass-outline'} size={size} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text className="text-xs font-medium" style={{ color }}>
+              Explore
+            </Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -55,8 +69,14 @@ const TabBar = () => {
         component={Create}
         options={{
           title: 'Create',
-          tabBarIcon: ({ color, size }) => <Plus size={size} color={color} />,
-          tabBarLabel: () => <Text>Order</Text>,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'list' : 'list-outline'} size={size} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text className="text-xs font-medium" style={{ color }}>
+              Order
+            </Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -64,8 +84,18 @@ const TabBar = () => {
         component={Notifications}
         options={{
           title: 'Notifications',
-          tabBarIcon: ({ color, size }) => <MessageCircleMoreIcon size={size} color={color} />,
-          tabBarLabel: () => <Text>Notifications</Text>,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons
+              name={focused ? 'chatbubble-ellipses' : 'chatbubble-ellipses-outline'}
+              size={size}
+              color={color}
+            />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text className="text-xs font-medium" style={{ color }}>
+              Chat
+            </Text>
+          ),
         }}
       />
       <Tab.Screen
@@ -73,8 +103,14 @@ const TabBar = () => {
         component={Profile}
         options={{
           title: 'Profile',
-          tabBarIcon: ({ color, size }) => <User2 size={size} color={color} />,
-          tabBarLabel: () => <Text>Profile</Text>,
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name={focused ? 'person' : 'person-outline'} size={size} color={color} />
+          ),
+          tabBarLabel: ({ color }) => (
+            <Text className="text-xs font-medium" style={{ color }}>
+              Profile
+            </Text>
+          ),
         }}
       />
     </Tab.Navigator>

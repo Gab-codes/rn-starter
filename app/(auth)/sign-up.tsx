@@ -165,10 +165,10 @@ export default function SignUp() {
           <Text className="text-lg font-semibold text-white">Sign Up</Text>
         </Button>
 
-        {/* Divider */}
-        <View className="relative my-2 w-full flex-row items-center">
-          <View className="absolute h-[0.7px] w-full bg-[#8D8D8D]" />
-          <Text className="mx-auto bg-white px-2">Or Sign Up with</Text>
+        <View className="my-2 w-full flex-row items-center">
+          <View className="h-[0.7px] flex-1 bg-[#8D8D8D]" />
+          <Text className="mx-3 text-[#8D8D8D]">Or Sign Up with</Text>
+          <View className="h-[0.7px] flex-1 bg-[#8D8D8D]" />
         </View>
 
         {/* Google Login */}
