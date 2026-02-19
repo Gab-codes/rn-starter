@@ -6,16 +6,9 @@ import { Label } from '@/components/ui/label';
 import { useRouter } from 'expo-router';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { ScrollView, View, Pressable, TouchableOpacity, Image, Platform } from 'react-native';
-import { lightHaptic } from '@/lib/utils';
+import { isValidEmail, lightHaptic } from '@/lib/utils';
 
 /* ---------------- validation helpers ---------------- */
-
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-function isValidEmail(email: string) {
-  return emailRegex.test(email);
-}
-
 function isValidPassword(password: string) {
   return password.length >= 8;
 }
